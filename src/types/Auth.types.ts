@@ -1,0 +1,14 @@
+import type { LoginFormValues, User } from "./Login.types";
+import type { RegisterFormValues } from "./Register.types";
+
+
+export interface AuthContextType {
+    user: User | null;
+    token: string | null;
+    isAuthenticated: boolean;
+    login: (data: LoginFormValues) => Promise<void>;
+    register: (
+            data: RegisterFormValues
+    ) => Promise<void>;
+    logout: () => void;
+}

@@ -10,16 +10,34 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { AuthContext } from "@/contexts/AuthContext"
+import { loginSchema, type LoginFormValues } from "@/types/Login.types"
+import { useFormik } from "formik"
+import { useContext } from "react"
 import { Link } from "react-router-dom"
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const auth = useContext(AuthContext)
+  const formik = useFormik<LoginFormValues>({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: async (values) => {
+      await auth?.login(values)
+    },
+  })
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -30,7 +48,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={formik.handleSubmit} noValidate>
             <FieldGroup>
               <Field>
                 <Button variant="outline" type="button">
@@ -55,16 +73,21 @@ export function LoginForm({
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
-              <Field>
+              <Field data-invalid={Boolean(formik.touched.email && formik.errors.email)}>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  aria-invalid={Boolean(formik.touched.email && formik.errors.email)}
                 />
+                <FieldError>{formik.touched.email && formik.errors.email}</FieldError>
               </Field>
-              <Field>
+              <Field data-invalid={Boolean(formik.touched.password && formik.errors.password)}>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <a
@@ -74,10 +97,21 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  aria-invalid={Boolean(formik.touched.password && formik.errors.password)}
+                />
+                <FieldError>{formik.touched.password && formik.errors.password}</FieldError>
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" disabled={formik.isSubmitting}>
+                  {formik.isSubmitting ? "Logging in..." : "Login"}
+                </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? <Link to="/register">Sign up</Link>
                 </FieldDescription>

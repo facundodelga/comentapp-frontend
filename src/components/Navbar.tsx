@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu, X, PackageSearch, PartyPopperIcon, BadgeDollarSign } from 'lucide-react';
+import { Menu, X, BadgeDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     NavigationMenu,
