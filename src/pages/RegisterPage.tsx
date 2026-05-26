@@ -1,4 +1,4 @@
-import { GalleryVerticalEnd } from "lucide-react"
+import { BadgeDollarSign } from "lucide-react"
 import { SignupForm } from "@/components/signup-form"
 export default function SignupPage() {
     return (
@@ -6,9 +6,9 @@ export default function SignupPage() {
             <div className="flex w-full max-w-sm flex-col gap-6">
                 <a href="#" className="flex items-center gap-2 self-center font-medium">
                     <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                        <GalleryVerticalEnd className="size-4" />
+                        <BadgeDollarSign className="h-5 w-5" />
                     </div>
-                    Acme Inc.
+                    ComentApp
                 </a>
                 <SignupForm />
             </div>

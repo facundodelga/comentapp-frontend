@@ -20,6 +20,7 @@ import { registerSchema, type RegisterFormValues } from "@/types/Register.types"
 import { useFormik } from "formik"
 import { useContext } from "react"
 import { Link } from "react-router-dom"
+import { Spinner } from "./ui/spinner"
 
 export function SignupForm({
   className,
@@ -29,7 +30,7 @@ export function SignupForm({
   const formik = useFormik<RegisterFormValues>({
     initialValues: {
       firstName: "",
-      lastName: "",
+      surname: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -66,19 +67,19 @@ export function SignupForm({
                 />
                 <FieldError>{formik.touched.firstName && formik.errors.firstName}</FieldError>
               </Field>
-              <Field data-invalid={Boolean(formik.touched.lastName && formik.errors.lastName)}>
-                <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
+              <Field data-invalid={Boolean(formik.touched.surname && formik.errors.surname)}>
+                <FieldLabel htmlFor="surname">Surname</FieldLabel>
                 <Input
-                  id="lastName"
-                  name="lastName"
+                  id="surname"
+                  name="surname"
                   type="text"
                   placeholder="Doe"
-                  value={formik.values.lastName}
+                  value={formik.values.surname}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  aria-invalid={Boolean(formik.touched.lastName && formik.errors.lastName)}
+                  aria-invalid={Boolean(formik.touched.surname && formik.errors.surname)}
                 />
-                <FieldError>{formik.touched.lastName && formik.errors.lastName}</FieldError>
+                <FieldError>{formik.touched.surname && formik.errors.surname}</FieldError>
               </Field>
               <Field data-invalid={Boolean(formik.touched.email && formik.errors.email)}>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -131,7 +132,7 @@ export function SignupForm({
               </Field>
               <Field>
                 <Button type="submit" disabled={formik.isSubmitting}>
-                  {formik.isSubmitting ? "Creating account..." : "Create Account"}
+                  {formik.isSubmitting ? (<Spinner/>) : "Create Account"}
                 </Button>
                 <FieldDescription className="text-center">
                   Already have an account? <Link to="/login">Sign in</Link>

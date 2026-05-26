@@ -1,14 +1,11 @@
 import * as Yup from "yup";
 
 export interface RegisterRequest {
-    user: {
-        firstName: string;
-        lastName: string;
-    };
-    credentials: {
-        email: string;
-        password: string;
-    };
+    firstName: string;
+    surname: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
 }
 
 const emailRegex = /^(?!\.)[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -22,7 +19,7 @@ export const registerSchema = Yup.object({
         .required("El nombre es obligatorio.")
         .max(50, "El nombre es demasiado largo."),
 
-    lastName: Yup.string()
+    surname: Yup.string()
         .trim()
         .required("El apellido es obligatorio.")
         .max(50, "El apellido es demasiado largo."),
@@ -51,13 +48,11 @@ export type RegisterFormValues = Yup.InferType<typeof registerSchema>;
 
 export function toRegisterRequest(data: RegisterFormValues): RegisterRequest {
     return {
-        user: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-        },
-        credentials: {
-            email: data.email,
-            password: data.password,
-        },
+        
+        firstName: data.firstName,
+        surname: data.surname,
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
     };
 }

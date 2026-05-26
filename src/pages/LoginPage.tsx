@@ -1,5 +1,5 @@
 import { LoginForm } from '@/components/login-form'
-import { GalleryVerticalEnd } from 'lucide-react'
+import { BadgeDollarSign } from 'lucide-react'
 const LoginPage = () => {
     return (
         <>
@@ -7,9 +7,9 @@ const LoginPage = () => {
                 <div className="flex w-full max-w-sm flex-col gap-6">
                     <a href="#" className="flex items-center gap-2 self-center font-medium">
                         <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                            <GalleryVerticalEnd className="size-4" />
+                            <BadgeDollarSign className="h-5 w-5" />
                         </div>
-                        Acme Inc.
+                        ComentApp
                     </a>
                     <LoginForm />
                 </div>

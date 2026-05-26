@@ -52,9 +52,8 @@ export const AuthProvider = ({ children }: Props) => {
     const register = async (data: RegisterFormValues) => {
         // aquí iría la llamada real al backend
         // const response = await api.post("/register", { name, surname, email, password })
-
         await registerService(toRegisterRequest(data)).then((response) => {
-            toast.success("Registration successful " + {response});
+            toast.success("Registration successful ");
         }).catch((error) => {
             toast.error("Registration failed " + error.message);
         });

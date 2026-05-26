@@ -3,13 +3,13 @@ import type { LoginFormValues, LoginResponse } from "@/types/Login.types"
 import type { RegisterRequest } from "@/types/Register.types"
 
 export async function loginService(data: LoginFormValues): Promise<LoginResponse> {
-    const response = await authClient.post(`/auth/login`, data)
+    const response = await authClient.post(`/authentication/login`, data)
     return response.data
 }
 
 export async function registerService(data: RegisterRequest): Promise<void> {
     try {
-        const response = await authClient.post(`/auth/register`, data)
+        const response = await authClient.post(`/authentication/register`, data)
         return response.data
     } catch (e) {
         throw e;
@@ -18,7 +18,7 @@ export async function registerService(data: RegisterRequest): Promise<void> {
 }
 
 export async function logoutService() {
-    const response = await authClient.post(`/auth/logout`)
+    const response = await authClient.post(`/authentication/logout`)
     return response.data
 }
 
