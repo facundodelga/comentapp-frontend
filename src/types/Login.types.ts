@@ -14,17 +14,17 @@ export const passwordRegex =
 export const loginSchema = Yup.object({
     email: Yup.string()
         .trim()
-        .required("El email es obligatorio.")
-        .max(100, "El email es demasiado largo.")
-        .matches(emailRegex, "Ingresa un email valido."),
+        .required("El correo electrónico es obligatorio.")
+        .max(100, "El correo electrónico es demasiado largo.")
+        .matches(emailRegex, "Ingresa un correo electrónico válido."),
 
     password: Yup.string()
-        .required("La contrasena es obligatoria.")
-        .min(8, "La contrasena debe tener al menos 8 caracteres.")
-        .max(100, "La contrasena debe tener como maximo 100 caracteres.")
+        .required("La contraseña es obligatoria.")
+        .min(8, "La contraseña debe tener al menos 8 caracteres.")
+        .max(100, "La contraseña debe tener como máximo 100 caracteres.")
         .matches(
             passwordRegex,
-            "La contrasena debe incluir mayuscula, minuscula, numero y simbolo.",
+            "La contraseña debe incluir mayúscula, minúscula, número y símbolo.",
         ),
 });
 

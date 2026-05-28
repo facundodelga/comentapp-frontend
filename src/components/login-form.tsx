@@ -42,9 +42,9 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
+          <CardTitle className="text-xl">Bienvenido de nuevo</CardTitle>
           <CardDescription>
-            Login with your Google account
+            Inicia sesión con tu cuenta de Google
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -58,19 +58,19 @@ export function LoginForm({
                       fill="currentColor"
                     />
                   </svg>
-                  Login with Google
+                  Iniciar sesión con Google
                 </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                Or continue with
+                O continúa con
               </FieldSeparator>
               <Field data-invalid={Boolean(formik.touched.email && formik.errors.email)}>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="correo@ejemplo.com"
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -80,12 +80,12 @@ export function LoginForm({
               </Field>
               <Field data-invalid={Boolean(formik.touched.password && formik.errors.password)}>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <FieldLabel htmlFor="password">Contraseña</FieldLabel>
                   <a
                     href="#"
                     className="ml-auto text-sm underline-offset-4 hover:underline"
                   >
-                    Forgot your password?
+                    ¿Olvidaste tu contraseña?
                   </a>
                 </div>
                 <Input
@@ -101,10 +101,10 @@ export function LoginForm({
               </Field>
               <Field>
                 <Button type="submit" disabled={formik.isSubmitting}>
-                  {formik.isSubmitting ? "Logging in..." : "Login"}
+                  {formik.isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <Link to="/register">Sign up</Link>
+                  ¿No tienes una cuenta? <Link to="/register">Regístrate</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
@@ -112,8 +112,8 @@ export function LoginForm({
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <Link to="/terms">Terms of Service</Link>{" "}
-        and <Link to="/privacy">Privacy Policy</Link>.
+        Al continuar, aceptas nuestros <Link to="/terms">Términos de servicio</Link>{" "}
+        y nuestra <Link to="/privacy">Política de privacidad</Link>.
       </FieldDescription>
     </div>
   )

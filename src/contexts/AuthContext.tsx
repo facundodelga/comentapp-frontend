@@ -29,12 +29,12 @@ export const AuthProvider = ({ children }: Props) => {
     const login = async (data: LoginFormValues) => {
 
         await loginService(data).then((response) => {
-            toast.success("Login successful " + {response});
+            toast.success("Inicio de sesión exitoso " + {response});
             localStorage.setItem("token", response.token)
             localStorage.setItem("user", JSON.stringify(response.user))
         }).catch((error) => {
-            toast.error("Login failed");
-            console.error("Login failed:", error);
+            toast.error("No se pudo iniciar sesión");
+            console.error("No se pudo iniciar sesión:", error);
         });
 
         
@@ -52,10 +52,10 @@ export const AuthProvider = ({ children }: Props) => {
     const register = async (data: RegisterFormValues) => {
         // aquí iría la llamada real al backend
         // const response = await api.post("/register", { name, surname, email, password })
-        await registerService(toRegisterRequest(data)).then((response) => {
-            toast.success("Registration successful ");
+        await registerService(toRegisterRequest(data)).then(() => {
+            toast.success("Registro exitoso");
         }).catch((error) => {
-            toast.error("Registration failed " + error.message);
+            toast.error("No se pudo completar el registro " + error.message);
         });
 
     }

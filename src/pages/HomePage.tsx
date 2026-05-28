@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
                             Comenzar
                         </Button>
                         <Button className="border-2 px-8 py-3 rounded-lg font-semibold">
-                            <Link to="/about">Más Información</Link>
+                            <Link to="/about">Más información</Link>
                         </Button>
                     </div>
                 </Card>

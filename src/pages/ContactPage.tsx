@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object({
     nombre: Yup.string().trim().required("El nombre es obligatorio"),
-    email: Yup.string().trim().email("Debe ser un email válido").required("El email es obligatorio"),
+    email: Yup.string().trim().email("Debe ser un correo electrónico válido").required("El correo electrónico es obligatorio"),
     mensaje: Yup.string().trim().required("El mensaje es obligatorio"),
 });
 
@@ -28,7 +28,7 @@ const ContactPage: React.FC = () => {
                 if (!response.ok) {
                     throw new Error("Error al enviar el formulario. " + response.statusText);
                 }
-                console.log("Formulario válido y envido:", values);
+                console.log("Formulario válido y enviado:", values);
                 formik.resetForm();
             }).catch((e) => {
                 console.error(e.message);
@@ -40,8 +40,8 @@ const ContactPage: React.FC = () => {
         <div className="flex justify-center items-center min-h-screen">
             <Card className="min-w-96 w-[35vw] min-h-[400px] flex flex-col">
                 <CardHeader className="gap-5">
-                    <CardTitle className="ml-10 mr-10 border-b-2 p-1 text-xl">Contactanos</CardTitle>
-                    <CardDescription className="ml-10 mr-10">Envianos tu consulta, duda o sugerencia</CardDescription>
+                    <CardTitle className="ml-10 mr-10 border-b-2 p-1 text-xl">Contáctanos</CardTitle>
+                    <CardDescription className="ml-10 mr-10">Envíanos tu consulta, duda o sugerencia</CardDescription>
                 </CardHeader>
 
                 <CardContent className="p-5 ml-10 mr-10 flex-1 flex flex-col">
@@ -59,7 +59,7 @@ const ContactPage: React.FC = () => {
                         </div>
 
                         <div className="w-full">
-                            <input className="w-full border-b p-1 focus:outline-none" type="email" placeholder="Email"
+                            <input className="w-full border-b p-1 focus:outline-none" type="email" placeholder="Correo electrónico"
                                 name="email"
                                 value={formik.values.email}
                                 onChange={formik.handleChange}
@@ -83,7 +83,7 @@ const ContactPage: React.FC = () => {
                             ) : null}
                         </div>
 
-                        <button 
+                        <button
                             type="submit"
                             disabled={!formik.isValid || !formik.dirty}
                             className="self-center rounded-xl border-2 w-fit p-2 disabled:opacity-50 mt-2 disabled:cursor-not-allowed">

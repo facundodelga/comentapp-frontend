@@ -81,7 +81,7 @@ export default function Navbar() {
                                 >
 
                                     Cerrar sesión
-                                
+
                             </Button>
                         </>
 
@@ -117,7 +117,7 @@ export default function Navbar() {
                         variant="ghost"
                         size="icon"
                         onClick={() => setIsOpen(!isOpen)}
-                        aria-label="Toggle menu"
+                        aria-label="Abrir o cerrar menú"
                         className="rounded-full"
                     >
                         {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

@@ -45,21 +45,21 @@ export function SignupForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Create your account</CardTitle>
+          <CardTitle className="text-xl">Crea tu cuenta</CardTitle>
           <CardDescription>
-            Enter your email below to create your account
+            Ingresa tu correo electrónico para crear tu cuenta
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={formik.handleSubmit} noValidate>
             <FieldGroup>
               <Field data-invalid={Boolean(formik.touched.firstName && formik.errors.firstName)}>
-                <FieldLabel htmlFor="firstName">First Name</FieldLabel>
+                <FieldLabel htmlFor="firstName">Nombre</FieldLabel>
                 <Input
                   id="firstName"
                   name="firstName"
                   type="text"
-                  placeholder="John"
+                  placeholder="Juan"
                   value={formik.values.firstName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -68,12 +68,12 @@ export function SignupForm({
                 <FieldError>{formik.touched.firstName && formik.errors.firstName}</FieldError>
               </Field>
               <Field data-invalid={Boolean(formik.touched.surname && formik.errors.surname)}>
-                <FieldLabel htmlFor="surname">Surname</FieldLabel>
+                <FieldLabel htmlFor="surname">Apellido</FieldLabel>
                 <Input
                   id="surname"
                   name="surname"
                   type="text"
-                  placeholder="Doe"
+                  placeholder="Pérez"
                   value={formik.values.surname}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -82,12 +82,12 @@ export function SignupForm({
                 <FieldError>{formik.touched.surname && formik.errors.surname}</FieldError>
               </Field>
               <Field data-invalid={Boolean(formik.touched.email && formik.errors.email)}>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="correo@ejemplo.com"
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -98,7 +98,7 @@ export function SignupForm({
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
                   <Field data-invalid={Boolean(formik.touched.password && formik.errors.password)}>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <FieldLabel htmlFor="password">Contraseña</FieldLabel>
                     <Input
                       id="password"
                       name="password"
@@ -111,7 +111,7 @@ export function SignupForm({
                   </Field>
                   <Field data-invalid={Boolean(formik.touched.confirmPassword && formik.errors.confirmPassword)}>
                     <FieldLabel htmlFor="confirmPassword">
-                      Confirm Password
+                      Confirmar contraseña
                     </FieldLabel>
                     <Input
                       id="confirmPassword"
@@ -127,15 +127,15 @@ export function SignupForm({
                 <FieldError>{formik.touched.password && formik.errors.password}</FieldError>
                 <FieldError>{formik.touched.confirmPassword && formik.errors.confirmPassword}</FieldError>
                 <FieldDescription>
-                  Must be at least 8 characters long.
+                  Debe tener al menos 8 caracteres.
                 </FieldDescription>
               </Field>
               <Field>
                 <Button type="submit" disabled={formik.isSubmitting}>
-                  {formik.isSubmitting ? (<Spinner/>) : "Create Account"}
+                  {formik.isSubmitting ? (<Spinner/>) : "Crear cuenta"}
                 </Button>
                 <FieldDescription className="text-center">
-                  Already have an account? <Link to="/login">Sign in</Link>
+                  ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
@@ -143,8 +143,8 @@ export function SignupForm({
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <Link to="/terms">Terms of Service</Link>{" "}
-        and <Link to="/privacy">Privacy Policy</Link>.
+        Al continuar, aceptas nuestros <Link to="/terms">Términos de servicio</Link>{" "}
+        y nuestra <Link to="/privacy">Política de privacidad</Link>.
       </FieldDescription>
     </div>
   )
