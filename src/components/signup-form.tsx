@@ -29,8 +29,9 @@ export function SignupForm({
   const auth = useContext(AuthContext)
   const formik = useFormik<RegisterFormValues>({
     initialValues: {
-      firstName: "",
+      name: "",
       surname: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -53,19 +54,19 @@ export function SignupForm({
         <CardContent>
           <form onSubmit={formik.handleSubmit} noValidate>
             <FieldGroup>
-              <Field data-invalid={Boolean(formik.touched.firstName && formik.errors.firstName)}>
-                <FieldLabel htmlFor="firstName">Nombre</FieldLabel>
+              <Field data-invalid={Boolean(formik.touched.name && formik.errors.name)}>
+                <FieldLabel htmlFor="name">Nombre</FieldLabel>
                 <Input
-                  id="firstName"
-                  name="firstName"
+                  id="name"
+                  name="name"
                   type="text"
                   placeholder="Juan"
-                  value={formik.values.firstName}
+                  value={formik.values.name}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  aria-invalid={Boolean(formik.touched.firstName && formik.errors.firstName)}
+                  aria-invalid={Boolean(formik.touched.name && formik.errors.name)}
                 />
-                <FieldError>{formik.touched.firstName && formik.errors.firstName}</FieldError>
+                <FieldError>{formik.touched.name && formik.errors.name}</FieldError>
               </Field>
               <Field data-invalid={Boolean(formik.touched.surname && formik.errors.surname)}>
                 <FieldLabel htmlFor="surname">Apellido</FieldLabel>
@@ -80,6 +81,20 @@ export function SignupForm({
                   aria-invalid={Boolean(formik.touched.surname && formik.errors.surname)}
                 />
                 <FieldError>{formik.touched.surname && formik.errors.surname}</FieldError>
+              </Field>
+              <Field data-invalid={Boolean(formik.touched.username && formik.errors.username)}>
+                <FieldLabel htmlFor="username">Nombre de usuario</FieldLabel>
+                <Input
+                  id="username"
+                  name="username"
+                  type="text"
+                  placeholder="juanperez"
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  aria-invalid={Boolean(formik.touched.username && formik.errors.username)}
+                />
+                <FieldError>{formik.touched.name && formik.errors.name}</FieldError>
               </Field>
               <Field data-invalid={Boolean(formik.touched.email && formik.errors.email)}>
                 <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>

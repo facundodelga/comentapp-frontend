@@ -1,8 +1,9 @@
 import * as Yup from "yup";
 
 export interface RegisterRequest {
-    firstName: string;
+    name: string;
     surname: string;
+    userName: string;
     email: string;
     password: string;
     confirmPassword: string;
@@ -14,7 +15,7 @@ const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?]).{8,100}$/;
 
 export const registerSchema = Yup.object({
-    firstName: Yup.string()
+    name: Yup.string()
         .trim()
         .required("El nombre es obligatorio.")
         .max(50, "El nombre es demasiado largo."),
@@ -24,6 +25,11 @@ export const registerSchema = Yup.object({
         .required("El apellido es obligatorio.")
         .max(50, "El apellido es demasiado largo."),
 
+    username: Yup.string()
+        .trim()
+        .required("El nombre de usuario es obligatorio.")
+        .max(50, "El nombre de usuario es demasiado largo."),
+
     email: Yup.string()
         .trim()
         .required("El correo electrónico es obligatorio.")
@@ -32,12 +38,14 @@ export const registerSchema = Yup.object({
 
     password: Yup.string()
         .required("La contraseña es obligatoria.")
-        .min(8, "La contraseña debe tener al menos 8 caracteres.")
+        //.min(8, "La contraseña debe tener al menos 8 caracteres.")
         .max(100, "La contraseña debe tener como máximo 100 caracteres.")
+        /*
         .matches(
             passwordRegex,
             "La contraseña debe incluir mayúscula, minúscula, número y símbolo.",
-        ),
+        ) */,
+       
 
     confirmPassword: Yup.string()
         .required("Confirma tu contraseña.")
@@ -48,8 +56,8 @@ export type RegisterFormValues = Yup.InferType<typeof registerSchema>;
 
 export function toRegisterRequest(data: RegisterFormValues): RegisterRequest {
     return {
-        
-        firstName: data.firstName,
+        userName: data.username,
+        name: data.name,
         surname: data.surname,
         email: data.email,
         password: data.password,
