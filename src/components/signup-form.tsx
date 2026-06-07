@@ -19,7 +19,7 @@ import { AuthContext } from "@/contexts/AuthContext"
 import { registerSchema, type RegisterFormValues } from "@/types/Register.types"
 import { useFormik } from "formik"
 import { useContext } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Spinner } from "./ui/spinner"
 
 export function SignupForm({
@@ -27,6 +27,7 @@ export function SignupForm({
   ...props
 }: React.ComponentProps<"div">) {
   const auth = useContext(AuthContext)
+  const navigate = useNavigate()
   const formik = useFormik<RegisterFormValues>({
     initialValues: {
       name: "",
@@ -38,7 +39,13 @@ export function SignupForm({
     },
     validationSchema: registerSchema,
     onSubmit: async (values) => {
-      await auth?.register(values)
+
+      try {
+        await auth!.register(values)
+        navigate("/confirm-email", { state: { email: values.email } })
+      } catch {
+        return
+      }
     },
   })
 

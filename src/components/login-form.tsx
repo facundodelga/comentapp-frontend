@@ -27,6 +27,7 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const auth = useContext(AuthContext)
+  
   const formik = useFormik<LoginFormValues>({
     initialValues: {
       email: "",

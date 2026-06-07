@@ -10,9 +10,7 @@ export interface RegisterRequest {
 }
 
 const emailRegex = /^(?!\.)[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
-const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};':"\\|,.<>/?]).{8,100}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 export const registerSchema = Yup.object({
     name: Yup.string()
@@ -38,14 +36,13 @@ export const registerSchema = Yup.object({
 
     password: Yup.string()
         .required("La contraseña es obligatoria.")
-        //.min(8, "La contraseña debe tener al menos 8 caracteres.")
+        .min(8, "La contraseña debe tener al menos 8 caracteres.")
         .max(100, "La contraseña debe tener como máximo 100 caracteres.")
-        /*
+        
         .matches(
             passwordRegex,
             "La contraseña debe incluir mayúscula, minúscula, número y símbolo.",
-        ) */,
-       
+        ),
 
     confirmPassword: Yup.string()
         .required("Confirma tu contraseña.")

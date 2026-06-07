@@ -5,7 +5,6 @@ import { useToast } from "../hooks/useToast"
 import type { LoginFormValues, User } from "@/types/Login.types"
 import { toRegisterRequest, type RegisterFormValues } from "@/types/Register.types"
 import type { AuthContextType } from "@/types/Auth.types"
-import type { AxiosError } from "axios"
 import { formatError } from "@/lib/utils"
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -56,8 +55,9 @@ export const AuthProvider = ({ children }: Props) => {
         // const response = await api.post("/register", { name, surname, email, password })
         await registerService(toRegisterRequest(data)).then(() => {
             toast.success("Registro exitoso");
-        }).catch((error : AxiosError) => {
+        }).catch((error) => {
             toast.error(formatError(error));
+            throw error;
         });
 
     }
