@@ -1,76 +1,93 @@
-import { createContext, useState,useEffect, type ReactNode } from "react"
-import { redirect } from "react-router-dom"
-import { loginService, registerService } from "@/services//loginThunk"
-import { useToast } from "../hooks/useToast"
+import { useEffect, useState, type ReactNode } from "react"
+import { useNavigate } from "react-router-dom"
+import {
+    AUTH_SESSION_EXPIRED_EVENT,
+    loginService,
+    logoutService,
+    me,
+    registerService,
+} from "@/services/loginThunk"
+import { useToast } from "@/hooks/useToast"
 import type { LoginFormValues, User } from "@/types/Login.types"
 import { toRegisterRequest, type RegisterFormValues } from "@/types/Register.types"
-import type { AuthContextType } from "@/types/Auth.types"
 import { formatError } from "@/lib/utils"
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined)
+import { AuthContext } from "@/contexts/auth-context"
 
 interface Props {
     children: ReactNode
 }
 
-export const AuthProvider = ({ children }: Props) => {
-    const [user, setUser] = useState<User | null>(null)
-    const [token, setToken] = useState<string | null>(null)
-    const { toast } = useToast();
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token")
-        const storedUser = localStorage.getItem("user")
+const getStoredUser = (): User | null => {
+    const storedUser = localStorage.getItem("user")
 
-        if (storedToken && storedUser) {
-            setToken(storedToken)
-            setUser(JSON.parse(storedUser))
+    if (!storedUser) return null
+
+    try {
+        return JSON.parse(storedUser)
+    } catch {
+        localStorage.removeItem("user")
+        return null
+    }
+}
+
+export const AuthProvider = ({ children }: Props) => {
+    const [user, setUser] = useState<User | null>(getStoredUser)
+    const { toast } = useToast()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const handleExpiredSession = () => {
+            setUser(null)
+            toast.error("Tu sesión expiró. Inicia sesión nuevamente.")
+            navigate("/login", { replace: true })
         }
-    }, [])
+
+        window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleExpiredSession)
+        return () => window.removeEventListener(AUTH_SESSION_EXPIRED_EVENT, handleExpiredSession)
+    }, [navigate, toast])
 
     const login = async (data: LoginFormValues) => {
+        try {
+            await loginService(data)
+            const userData = await me()
 
-        await loginService(data).then((response) => {
-            toast.success("Inicio de sesión exitoso " + {response});
-            localStorage.setItem("token", response.token)
-            localStorage.setItem("user", JSON.stringify(response.user))
-        }).catch((error) => {
-            toast.error("No se pudo iniciar sesión");
-            console.error("No se pudo iniciar sesión:", error);
-        });
-
-        
+            setUser(userData)
+            localStorage.setItem("user", JSON.stringify(userData))
+            toast.success("Inicio de sesión exitoso")
+        } catch (error) {
+            toast.error("No se pudo iniciar sesión")
+            throw error
+        }
     }
 
-    const logout = () => {
-        setUser(null)
-        setToken(null)
-
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-        throw redirect("/");
+    const logout = async () => {
+        try {
+            await logoutService()
+        } finally {
+            setUser(null)
+            localStorage.removeItem("user")
+            navigate("/login", { replace: true })
+        }
     }
 
     const register = async (data: RegisterFormValues) => {
-        // aquí iría la llamada real al backend
-        // const response = await api.post("/register", { name, surname, email, password })
-        await registerService(toRegisterRequest(data)).then(() => {
-            toast.success("Registro exitoso");
-        }).catch((error) => {
-            toast.error(formatError(error));
-            throw error;
-        });
-
+        try {
+            await registerService(toRegisterRequest(data))
+            toast.success("Registro exitoso")
+        } catch (error) {
+            toast.error(formatError(error))
+            throw error
+        }
     }
 
     return (
         <AuthContext.Provider
             value={{
                 user,
-                token,
                 isAuthenticated: !!user,
                 login,
                 logout,
-                register
+                register,
             }}
         >
             {children}

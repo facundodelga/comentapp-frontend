@@ -18,7 +18,7 @@ const HomePage: React.FC = () => {
 
                     <div className="flex gap-4 justify-center">
                         <Button className="px-8 py-3 rounded-lg font-semibold">
-                            Comenzar
+                            <Link to="/comentarios">Comenzar</Link>
                         </Button>
                         <Button className="border-2 px-8 py-3 rounded-lg font-semibold">
                             <Link to="/about">Más información</Link>

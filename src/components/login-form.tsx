@@ -16,17 +16,18 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { AuthContext } from "@/contexts/AuthContext"
+import { AuthContext } from "@/contexts/auth-context"
 import { loginSchema, type LoginFormValues } from "@/types/Login.types"
 import { useFormik } from "formik"
 import { useContext } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const auth = useContext(AuthContext)
+  const navigate = useNavigate()
   
   const formik = useFormik<LoginFormValues>({
     initialValues: {
@@ -35,7 +36,10 @@ export function LoginForm({
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
-      await auth?.login(values)
+      if (!auth) return
+
+      await auth.login(values)
+      navigate("/", { replace: true })
     },
   })
 

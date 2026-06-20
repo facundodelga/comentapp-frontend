@@ -1,9 +1,14 @@
 import * as Yup from "yup";
 
 export interface User {
-    id: string;
+    id: string | number;
     email: string;
-    name: string;
+    name?: string;
+    userName?: string;
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    surname?: string;
 }
 
 export const emailRegex = /^(?!\.)[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

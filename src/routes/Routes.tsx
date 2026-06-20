@@ -5,7 +5,9 @@ import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import RegisterPage from "@/pages/RegisterPage";
+import SettingsPage from "@/pages/SettingsPage";
 import { createBrowserRouter } from "react-router-dom";
+import CommentsPage from "@/pages/CommentsPage";
 
 export const router = createBrowserRouter([
     {
@@ -17,6 +19,8 @@ export const router = createBrowserRouter([
             { path: "/register", element: <RegisterPage /> },
             { path: "/confirm-email", element: <ConfirmEmailPage /> },
             { path: "/contact", element: <ContactPage /> },
+            { path: "/settings", element: <SettingsPage /> },
+            { path: "/comentarios", element: <CommentsPage /> }
         ],
     },
 ])

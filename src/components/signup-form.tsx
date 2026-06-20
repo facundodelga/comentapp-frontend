@@ -15,7 +15,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { AuthContext } from "@/contexts/AuthContext"
+import { AuthContext } from "@/contexts/auth-context"
 import { registerSchema, type RegisterFormValues } from "@/types/Register.types"
 import { useFormik } from "formik"
 import { useContext } from "react"
