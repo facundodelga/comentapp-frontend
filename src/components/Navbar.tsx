@@ -73,11 +73,18 @@ export default function Navbar() {
                             </NavigationMenuItem>
                             <NavigationMenuItem>
                                 <NavigationMenuLink asChild>
-                                    <Link to="/contact" className="inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
-                                        Contacto
+                                    <Link to="/explore" className="inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                                        Explorar
                                     </Link>
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
+                                <NavigationMenuItem>
+                                    <NavigationMenuLink asChild>
+                                        <Link to="/be-creator" className="inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                                            Sé un Creador
+                                        </Link>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
