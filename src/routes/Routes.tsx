@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
             { path: "/confirm-email", element: <ConfirmEmailPage /> },
             { path: "/contact", element: <ContactPage /> },
             { path: "/settings", element: <SettingsPage /> },
-            { path: "/comentarios", element: <CommentsPage /> }
+            { path: "/new-comment", element: <CommentsPage /> }
         ],
     },
 ])

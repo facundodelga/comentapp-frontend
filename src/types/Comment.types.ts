@@ -1,6 +1,6 @@
 import * as Yup from "yup"
 
-export const COMMENT_MAX_LENGTH = 400
+export const COMMENT_MAX_LENGTH = 300
 
 export interface CommentFormValues {
     creatorId: string
