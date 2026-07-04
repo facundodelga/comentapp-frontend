@@ -69,3 +69,11 @@ Comentapp es una aplicacion para que usuarios puedan enviar donaciones con comen
 ## Documentación
 - Referencias a más reglas, contexto, documentación y especificaciones.
 
+## Multiagentes
+
+Para tareas que crucen frontend/backend, contratos API, auth, pagos o cambios de persistencia, seguir el playbook raiz:
+
+- `../AGENTS.md`
+- `../docs/multiagent-workflow.md`
+
+En ese flujo, este proyecto debe ser tratado como el area del Implementador Frontend. El subagente frontend debe leer tambien `frontend.md`, `features.md` y la spec de feature afectada antes de tocar codigo.

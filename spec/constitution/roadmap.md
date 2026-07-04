@@ -63,9 +63,9 @@
  
 ### 5. Vista del creador — comentarios en tiempo real
 - **Estado:** `pending`
-- **Ruta:** `/dashboard` (o equivalente, solo para creadores)
+- **Ruta:** `/comments` (o equivalente, solo para creadores)
 - **Audiencia:** Usuarios con rol de creador activo
-- **Descripción:** Panel que muestra los comentarios recibidos junto al monto donado, actualizándose en tiempo real a medida que llegan nuevas donaciones. 
+- **Descripción:** Panel que muestra los comentarios recibidos junto al monto donado, los comentarios son una lista de tarjetas que contiene: nombre de usuario, monto, y el comentario, actualizándose en tiempo real a medida que llegan nuevas donaciones. en un apartado se muestra la cantidad de comentarios sin leer, se deben marcar como leidos/no-leidos de forma visual.
 - **Dependencias:**
   - Formulario de donación funcionando end-to-end
   - Mercado Pago integrado y operativo
