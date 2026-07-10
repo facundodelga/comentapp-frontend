@@ -6,6 +6,7 @@ export interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     login: (data: LoginFormValues) => Promise<void>;
+    loginGoogle: () => void;
     register: (
             data: RegisterFormValues
     ) => Promise<void>;

@@ -87,6 +87,10 @@ export async function loginService(data: LoginFormValues): Promise<LoginResponse
     return response.data
 }
 
+export async function loginGoogleService() {
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/Authentication/google-login`
+}
+
 export async function registerService(data: RegisterRequest): Promise<void> {
     const response = await apiClient.post("/authentication/register", data)
     return response.data

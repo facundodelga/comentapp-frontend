@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import {
     AUTH_SESSION_EXPIRED_EVENT,
+    loginGoogleService,
     loginService,
     logoutService,
     me,
@@ -60,6 +61,10 @@ export const AuthProvider = ({ children }: Props) => {
         }
     }
 
+    const loginGoogle = async () => {
+        loginGoogleService();
+    }
+
     const logout = async () => {
         try {
             await logoutService()
@@ -86,6 +91,7 @@ export const AuthProvider = ({ children }: Props) => {
                 user,
                 isAuthenticated: !!user,
                 login,
+                loginGoogle,
                 logout,
                 register,
             }}
