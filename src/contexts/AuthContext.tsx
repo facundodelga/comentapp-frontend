@@ -33,8 +33,33 @@ const getStoredUser = (): User | null => {
 
 export const AuthProvider = ({ children }: Props) => {
     const [user, setUser] = useState<User | null>(getStoredUser)
+    const [isLoading, setIsLoading] = useState(true)
     const { toast } = useToast()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        let active = true
+
+        const bootstrapSession = async () => {
+            try {
+                const userData = await me()
+                if (!active) return
+                setUser(userData)
+                localStorage.setItem("user", JSON.stringify(userData))
+            } catch {
+                if (!active) return
+                setUser(null)
+                localStorage.removeItem("user")
+            } finally {
+                if (active) setIsLoading(false)
+            }
+        }
+
+        bootstrapSession()
+        return () => {
+            active = false
+        }
+    }, [])
 
     useEffect(() => {
         const handleExpiredSession = () => {
@@ -90,6 +115,7 @@ export const AuthProvider = ({ children }: Props) => {
             value={{
                 user,
                 isAuthenticated: !!user,
+                isLoading,
                 login,
                 loginGoogle,
                 logout,
