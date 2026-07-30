@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useBeACreator } from "@/hooks/useBeACreator";
+import { useAuthContext } from "@/contexts/auth-context";
 import { useToast } from "@/hooks/useToast";
+import { formatError } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const BeCreatorPage = () => {
     const navigate = useNavigate();
+    const [creatorName, setCreatorName] = useState("");
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const { markAsCreator } = useBeACreator();
+    const { refreshUser } = useAuthContext();
     const { toast } = useToast();
 
     const handleTermsAcceptance = () => {
@@ -20,6 +25,11 @@ const BeCreatorPage = () => {
     const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
 
+        if (!creatorName.trim()) {
+            toast.error("Ingresa tu nombre de creador.");
+            return;
+        }
+
         if (!termsAccepted) {
             toast.error("Debes aceptar los términos y condiciones para continuar.");
             return;
@@ -28,13 +38,13 @@ const BeCreatorPage = () => {
         setIsLoading(true);
 
         try {
-            await markAsCreator();
-            
-            toast.success("Ya sos un Creador!");
-            navigate("/"); 
+            await markAsCreator(creatorName);
+            // Re-hidrata el usuario para que isCreator pase a true (habilita rutas de creador).
+            await refreshUser();
+            toast.success("¡Ya sos un Creador! Conectá Mercado Pago para recibir donaciones.");
+            navigate("/settings");
         } catch (error) {
-            console.error(error);
-            toast.error("No se logró procesar la solicitud. Intentar nuevamente.");
+            toast.error(formatError(error));
         } finally {
             setIsLoading(false);
         }
@@ -65,6 +75,23 @@ const BeCreatorPage = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label htmlFor="creatorName" className="text-sm font-medium text-foreground">
+                            Nombre de creador
+                        </label>
+                        <Input
+                            id="creatorName"
+                            name="creatorName"
+                            placeholder="Tu nombre público"
+                            value={creatorName}
+                            onChange={(e) => setCreatorName(e.target.value)}
+                            autoComplete="off"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                            Así te verán los donantes. Debe ser único.
+                        </p>
+                    </div>
+
                     <div className="flex items-start gap-3 rounded-lg border border-border/60 bg-accent/10 p-4 transition-colors hover:bg-accent/20">
                         <input
                             type="checkbox"

@@ -103,6 +103,7 @@ Backend no implementa ese endpoint.
 Estado: placeholder.
 
 Pantalla existe, pero no tiene modo creador ni Mercado Pago.
+Diseño objetivo del panel de configuracion del creador (Mi pagina, Metodos de pago, Stream) documentado en `spec/features/feature-creator-settings-page.md`.
 
 ### Explore
 
@@ -139,19 +140,27 @@ Backend sugerido:
 
 Datos minimos:
 
-- creatorName
+- creatorName (nombre de fantasia, requerido)
+- al menos un link de red social (requerido)
 - userId desde sesion
-- MercadoPagoAccount cuando MP este conectado
-- descripcion/links opcionales
+- MercadoPagoAccount para finalizar config y recibir donaciones
+- descripcion opcional, links adicionales opcionales
+
+Reglas:
+
+- para activar el rol: creatorName + >=1 link de red social obligatorios.
+- para finalizar config y recibir donaciones: vincular cuenta Mercado Pago.
+- sin MP conectado el creador queda incompleto, no recibe pagos.
 
 Frontend:
 
 - mover flujo real a `/settings`
 - mostrar estado activo/inactivo
+- form con creatorName y >=1 link de red social, validar antes de enviar
 - toggle o accion explicita
 - toast de exito/error
 - actualizar usuario local
-- si activa por primera vez, pedir conectar Mercado Pago
+- si activa por primera vez, pedir conectar Mercado Pago para finalizar
 
 Nota:
 `/be-creator` puede quedar como onboarding, pero debe usar endpoint real.

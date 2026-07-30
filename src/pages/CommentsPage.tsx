@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { DollarSign, MessageSquareText } from "lucide-react"
 import { useFormik } from "formik"
 import { useNavigate } from "react-router-dom"
@@ -20,6 +20,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useAuthContext } from "@/contexts/auth-context"
+import { useToast } from "@/hooks/useToast"
+import { formatError } from "@/lib/utils"
+import { searchCreators, type PublicCreator } from "@/services/creatorService"
+import { createDonation } from "@/services/donationService"
 import {
     Combobox,
     ComboboxContent,
@@ -31,56 +35,36 @@ import {
 import {
     COMMENT_MAX_LENGTH,
     commentSchema,
-    toCreateCommentRequest,
     type CommentFormValues,
 } from "@/types/Comment.types"
-
-interface CreatorOption {
-    id: string
-    name: string
-    username: string
-    imageSrc: string
-}
-
-const creators: CreatorOption[] = [
-    {
-        id: "elrubius",
-        name: "El Rubius",
-        username: "@elrubius",
-        imageSrc: "/elrubius.jpg",
-    },
-    {
-        id: "palandri",
-        name: "Palandri",
-        username: "@palandri",
-        imageSrc: "/palandri.jpg",
-    },
-    {
-        id: "kobrakai",
-        name: "Kobra Kai",
-        username: "@kobrakai",
-        imageSrc: "/kobrakai.jpg",
-    },
-]
 
 const initialValues: CommentFormValues = {
     creatorId: "",
     comment: "",
-    price: "",
+    amount: "",
 }
 
 const CommentsPage = () => {
     const { user } = useAuthContext()
     const navigate = useNavigate()
+    const { toast } = useToast()
+    const [creators, setCreators] = useState<PublicCreator[]>([])
 
     const formik = useFormik<CommentFormValues>({
         initialValues,
         validationSchema: commentSchema,
         onSubmit: async (values) => {
-            const newComment = toCreateCommentRequest(values)
-
-            // El request al endpoint de comentarios se conectará aquí.
-            console.info("Nuevo comentario:", newComment)
+            try {
+                const { checkoutUrl } = await createDonation({
+                    creatorId: Number(values.creatorId),
+                    comment: values.comment.trim(),
+                    amount: Number(values.amount),
+                })
+                // Redirige al checkout de Mercado Pago; al volver cae en /donation/result.
+                window.location.href = checkoutUrl
+            } catch (error) {
+                toast.error(formatError(error))
+            }
         },
     })
 
@@ -90,17 +74,38 @@ const CommentsPage = () => {
         }
     }, [navigate, user])
 
+    useEffect(() => {
+        let active = true
+
+        const loadCreators = async () => {
+            try {
+                const data = await searchCreators()
+                // Solo creadores que pueden recibir pagos (MP conectado).
+                if (active) setCreators(data.filter((c) => c.mercadoPagoConnected))
+            } catch (error) {
+                if (active) toast.error(formatError(error))
+            }
+        }
+
+        loadCreators()
+        return () => {
+            active = false
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     if (!user) return null
 
     const commentHasError = Boolean(
         formik.touched.comment && formik.errors.comment,
     )
-    const priceHasError = Boolean(formik.touched.price && formik.errors.price)
+    const amountHasError = Boolean(formik.touched.amount && formik.errors.amount)
     const creatorHasError = Boolean(
         formik.touched.creatorId && formik.errors.creatorId,
     )
     const selectedCreator =
-        creators.find((creator) => creator.id === formik.values.creatorId) ?? null
+        creators.find((creator) => String(creator.id) === formik.values.creatorId) ??
+        null
 
     return (
         <main className="mx-auto min-h-[calc(100vh-4rem)] w-full max-w-3xl px-4 py-10 sm:px-6">
@@ -109,18 +114,18 @@ const CommentsPage = () => {
                     <MessageSquareText className="size-6" />
                 </div>
                 <h1 className="text-3xl font-bold tracking-tight">
-                    Nuevo comentario
+                    Enviar donación
                 </h1>
                 <p className="mt-2 text-muted-foreground">
-                    Comparte tu experiencia y agrega el precio de referencia.
+                    Elegí un creador, escribí tu comentario y definí el monto a donar.
                 </p>
             </div>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Crear comentario</CardTitle>
+                    <CardTitle>Donación con comentario</CardTitle>
                     <CardDescription>
-                        Completa los campos para publicar tu opinión.
+                        Al confirmar serás redirigido al checkout de Mercado Pago.
                     </CardDescription>
                 </CardHeader>
 
@@ -129,18 +134,18 @@ const CommentsPage = () => {
                         <FieldGroup>
                             <Field data-invalid={creatorHasError}>
                                 <FieldLabel htmlFor="creator">
-                                    Enviar comentario a
+                                    Enviar donación a
                                 </FieldLabel>
                                 <Combobox
                                     items={creators}
                                     value={selectedCreator}
-                                    itemToStringLabel={(creator) => creator.name}
-                                    itemToStringValue={(creator) => creator.id}
+                                    itemToStringLabel={(creator) => creator.creatorName}
+                                    itemToStringValue={(creator) => String(creator.id)}
                                     isItemEqualToValue={(item, value) => item.id === value.id}
                                     onValueChange={(creator) => {
                                         void formik.setFieldValue(
                                             "creatorId",
-                                            creator?.id ?? "",
+                                            creator ? String(creator.id) : "",
                                         )
                                         void formik.setFieldTouched("creatorId", true, false)
                                     }}
@@ -157,20 +162,20 @@ const CommentsPage = () => {
                                             No se encontraron creadores.
                                         </ComboboxEmpty>
                                         <ComboboxList>
-                                            {(creator: CreatorOption) => (
+                                            {(creator: PublicCreator) => (
                                                 <ComboboxProfileItem
                                                     key={creator.id}
                                                     value={creator}
-                                                    imageSrc={creator.imageSrc}
-                                                    name={creator.name}
-                                                    description={creator.username}
+                                                    imageSrc=""
+                                                    name={creator.creatorName}
+                                                    description={creator.description ?? ""}
                                                 />
                                             )}
                                         </ComboboxList>
                                     </ComboboxContent>
                                 </Combobox>
                                 <FieldDescription>
-                                    Selecciona el perfil que recibirá tu comentario.
+                                    Solo se listan creadores que pueden recibir pagos.
                                 </FieldDescription>
                                 <FieldError>
                                     {formik.touched.creatorId && formik.errors.creatorId}
@@ -189,7 +194,7 @@ const CommentsPage = () => {
                                 <Textarea
                                     id="comment"
                                     name="comment"
-                                    placeholder="Cuéntanos qué te pareció..."
+                                    placeholder="Escribí tu mensaje para el creador..."
                                     rows={6}
                                     maxLength={COMMENT_MAX_LENGTH}
                                     className="min-h-36 resize-y"
@@ -203,32 +208,32 @@ const CommentsPage = () => {
                                 </FieldError>
                             </Field>
 
-                            <Field data-invalid={priceHasError}>
-                                <FieldLabel htmlFor="price">
-                                    Precio de referencia
+                            <Field data-invalid={amountHasError}>
+                                <FieldLabel htmlFor="amount">
+                                    Monto a donar
                                 </FieldLabel>
                                 <div className="relative">
                                     <DollarSign className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
-                                        id="price"
-                                        name="price"
+                                        id="amount"
+                                        name="amount"
                                         type="number"
                                         inputMode="decimal"
-                                        min="0"
+                                        min="0.01"
                                         step="0.01"
                                         placeholder="0,00"
                                         className="pl-9"
-                                        value={formik.values.price}
+                                        value={formik.values.amount}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        aria-invalid={priceHasError}
+                                        aria-invalid={amountHasError}
                                     />
                                 </div>
                                 <FieldDescription>
-                                    Ingresa el importe pagado, sin símbolos monetarios.
+                                    El monto lo definís vos; debe ser mayor a 0.
                                 </FieldDescription>
                                 <FieldError>
-                                    {formik.touched.price && formik.errors.price}
+                                    {formik.touched.amount && formik.errors.amount}
                                 </FieldError>
                             </Field>
 
@@ -246,8 +251,8 @@ const CommentsPage = () => {
                                     disabled={formik.isSubmitting || !formik.dirty}
                                 >
                                     {formik.isSubmitting
-                                        ? "Publicando..."
-                                        : "Publicar comentario"}
+                                        ? "Redirigiendo a Mercado Pago..."
+                                        : "Donar y comentar"}
                                 </Button>
                             </Field>
                         </FieldGroup>

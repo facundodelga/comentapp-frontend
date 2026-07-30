@@ -7,6 +7,8 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const apiBaseUrl = env.VITE_API_BASE_URL
+
+  // Backend monolito: un solo host sirve auth y negocio.
   return {
     plugins: [react(), tailwindcss()],
     server: {
@@ -15,6 +17,7 @@ export default defineConfig(({ mode }) => {
           target: apiBaseUrl,
           changeOrigin: true,
           secure: false,
+          ws: true, // WebSocket para SignalR (/api/hubs/*)
           rewrite: (path) => path.replace(/^\/api/, ""),
         },
       },

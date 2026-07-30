@@ -5,13 +5,7 @@ export const COMMENT_MAX_LENGTH = 300
 export interface CommentFormValues {
     creatorId: string
     comment: string
-    price: number | ""
-}
-
-export interface CreateCommentRequest {
-    creatorId: string
-    comment: string
-    price: number
+    amount: number | ""
 }
 
 export const commentSchema: Yup.ObjectSchema<CommentFormValues> = Yup.object({
@@ -24,17 +18,9 @@ export const commentSchema: Yup.ObjectSchema<CommentFormValues> = Yup.object({
             COMMENT_MAX_LENGTH,
             `El comentario no puede superar los ${COMMENT_MAX_LENGTH} caracteres.`,
         ),
-    price: Yup.number()
+    amount: Yup.number()
         .transform((value, originalValue) => originalValue === "" ? undefined : value)
-        .typeError("Ingresa un precio válido.")
-        .required("El precio es obligatorio.")
-        .min(0, "El precio no puede ser negativo."),
-})
-
-export const toCreateCommentRequest = (
-    values: CommentFormValues,
-): CreateCommentRequest => ({
-    creatorId: values.creatorId,
-    comment: values.comment.trim(),
-    price: Number(values.price),
+        .typeError("Ingresa un monto válido.")
+        .required("El monto es obligatorio.")
+        .moreThan(0, "El monto debe ser mayor a 0."),
 })

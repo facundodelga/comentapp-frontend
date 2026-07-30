@@ -12,4 +12,6 @@ export interface AuthContextType {
             data: RegisterFormValues
     ) => Promise<void>;
     logout: () => Promise<void>;
+    /** Re-hidrata el usuario desde GET /me (p. ej. tras activar creador o conectar MP). */
+    refreshUser: () => Promise<User | null>;
 }

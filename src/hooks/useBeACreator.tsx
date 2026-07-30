@@ -1,18 +1,15 @@
 import { useAuthContext } from "@/contexts/auth-context";
-import { apiClient } from "@/services/loginThunk";
+import { registerCreator, type Creator } from "@/services/creatorService";
 
 export const useBeACreator = () => {
     const { isAuthenticated, user } = useAuthContext();
 
-    const markAsCreator = async () => {
+    // Paso 2: registra al usuario como creador (POST /Creators con creatorName).
+    const markAsCreator = async (creatorName: string): Promise<Creator> => {
         if (!isAuthenticated || !user) {
             throw new Error("Debes estar autenticado para realizar esta acción.");
         }
-        //TODO modificar a endpoint correspondiente
-        const response = await apiClient.post("/be-a-creator");
-        //TODO borrar log
-        console.log(response.data);
-        return response.data;
+        return registerCreator(creatorName.trim());
     };
 
     return { markAsCreator };

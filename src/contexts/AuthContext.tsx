@@ -100,6 +100,17 @@ export const AuthProvider = ({ children }: Props) => {
         }
     }
 
+    const refreshUser = async (): Promise<User | null> => {
+        try {
+            const userData = await me()
+            setUser(userData)
+            localStorage.setItem("user", JSON.stringify(userData))
+            return userData
+        } catch {
+            return null
+        }
+    }
+
     const register = async (data: RegisterFormValues) => {
         try {
             await registerService(toRegisterRequest(data))
@@ -120,6 +131,7 @@ export const AuthProvider = ({ children }: Props) => {
                 loginGoogle,
                 logout,
                 register,
+                refreshUser,
             }}
         >
             {children}
