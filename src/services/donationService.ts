@@ -38,6 +38,21 @@ export async function createDonation(
     return response.data
 }
 
+// La página pública se identifica por creatorName (no expone el id).
+// TODO: confirmar con backend si /donationcomments acepta creatorName.
+export interface CreateDonationByNameRequest {
+    creatorName: string
+    comment: string
+    amount: number
+}
+
+export async function createDonationByName(
+    data: CreateDonationByNameRequest,
+): Promise<CreateDonationResponse> {
+    const response = await apiClient.post("/donationcomments", data)
+    return response.data
+}
+
 /**
  * Estado real del pago verificado server-side (no confiar en los query params
  * de retorno del checkout).

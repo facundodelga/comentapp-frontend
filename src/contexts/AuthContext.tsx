@@ -111,6 +111,11 @@ export const AuthProvider = ({ children }: Props) => {
         }
     }
 
+    const updateUser = (userData: User) => {
+        setUser(userData)
+        localStorage.setItem("user", JSON.stringify(userData))
+    }
+
     const register = async (data: RegisterFormValues) => {
         try {
             await registerService(toRegisterRequest(data))
@@ -132,6 +137,7 @@ export const AuthProvider = ({ children }: Props) => {
                 logout,
                 register,
                 refreshUser,
+                updateUser,
             }}
         >
             {children}

@@ -27,6 +27,52 @@ export interface UpdateCreatorRequest {
     kickLink?: string
 }
 
+// Vista owner de GET /Creators/me/page-config.
+export interface CreatorPageConfig {
+    creatorName: string
+    description?: string | null
+    coverPhotoUrl?: string | null
+    minimumAmount?: number | null
+    presetAmounts: number[]
+    allowLinks: boolean
+    instagramLink?: string | null
+    tikTokLink?: string | null
+    youTubeLink?: string | null
+    twitchLink?: string | null
+    kickLink?: string | null
+    mercadoPagoConnected: boolean
+}
+
+// Contrato de PATCH /Creators/me/page-config (parcial: solo campos presentes cambian).
+export interface UpdatePageConfigRequest {
+    description?: string
+    coverPhotoUrl?: string
+    minimumAmount?: number | null
+    presetAmounts?: number[]
+    allowLinks?: boolean
+    instagramLink?: string
+    tikTokLink?: string
+    youTubeLink?: string
+    twitchLink?: string
+    kickLink?: string
+}
+
+// Vista pública de GET /Creators/{creatorName}/page (AllowAnonymous).
+export interface PublicCreatorPage {
+    creatorName: string
+    description?: string | null
+    coverPhotoUrl?: string | null
+    minimumAmount?: number | null
+    presetAmounts: number[]
+    allowLinks: boolean
+    instagramLink?: string | null
+    tikTokLink?: string | null
+    youTubeLink?: string | null
+    twitchLink?: string | null
+    kickLink?: string | null
+    canReceiveDonations: boolean
+}
+
 // Contrato de GET /Creators/me/comments y del evento SignalR "commentReceived".
 export interface CreatorComment {
     id: number
@@ -83,6 +129,29 @@ export async function updateMyCreator(
     data: UpdateCreatorRequest,
 ): Promise<Creator> {
     const response = await apiClient.patch("/creators/me", data)
+    return response.data
+}
+
+// "Mi página" (owner): configuración de la página de donaciones.
+export async function getMyPageConfig(): Promise<CreatorPageConfig> {
+    const response = await apiClient.get("/creators/me/page-config")
+    return response.data
+}
+
+export async function updateMyPageConfig(
+    data: UpdatePageConfigRequest,
+): Promise<CreatorPageConfig> {
+    const response = await apiClient.patch("/creators/me/page-config", data)
+    return response.data
+}
+
+// Página pública de donaciones de un creador. 404 si no existe.
+export async function getCreatorPublicPage(
+    creatorName: string,
+): Promise<PublicCreatorPage> {
+    const response = await apiClient.get(
+        `/creators/${encodeURIComponent(creatorName)}/page`,
+    )
     return response.data
 }
 

@@ -14,4 +14,6 @@ export interface AuthContextType {
     logout: () => Promise<void>;
     /** Re-hidrata el usuario desde GET /me (p. ej. tras activar creador o conectar MP). */
     refreshUser: () => Promise<User | null>;
+    /** Setea el usuario local (p. ej. tras editar la cuenta). Persiste en localStorage. */
+    updateUser: (user: User) => void;
 }

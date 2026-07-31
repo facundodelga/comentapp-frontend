@@ -9,6 +9,7 @@ export interface User {
     firstName?: string;
     lastName?: string;
     surname?: string;
+    avatarUrl?: string;
     isCreator?: boolean;
 }
 

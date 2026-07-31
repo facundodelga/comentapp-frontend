@@ -116,14 +116,9 @@ export default function Navbar() {
                             </div>
                         </details>
                     ) : (
-                        <>
-                            <Button variant="ghost" className="rounded-full px-5 text-sm font-medium" asChild>
-                                <Link to="/register">Registrarse</Link>
-                            </Button>
-                            <Button className="rounded-full px-5 text-sm font-medium shadow-sm" asChild>
-                                <Link to="/login">Iniciar sesión</Link>
-                            </Button>
-                        </>
+                        <Button className="rounded-full px-5 text-sm font-medium shadow-sm" asChild>
+                            <Link to="/login">Iniciar sesión</Link>
+                        </Button>
                     )}
                 </div>
 
@@ -178,14 +173,9 @@ export default function Navbar() {
                                     </button>
                                 </div>
                             ) : (
-                                <>
-                                    <Link onClick={closeMobileMenu} to="/login" className="w-full rounded-full border border-border/40 bg-card px-5 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-accent">
-                                        Iniciar sesión
-                                    </Link>
-                                    <Link onClick={closeMobileMenu} to="/register" className="w-full rounded-full border border-border/40 bg-card px-5 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-accent">
-                                        Registrarse
-                                    </Link>
-                                </>
+                                <Link onClick={closeMobileMenu} to="/login" className="w-full rounded-full border border-border/40 bg-card px-5 py-2 text-center text-sm font-medium text-foreground transition-colors hover:bg-accent">
+                                    Iniciar sesión
+                                </Link>
                             )}
                         </div>
                     </div>
